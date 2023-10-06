@@ -1,0 +1,1308 @@
+FORMAT: 1A
+HOST: http://polls.apiblueprint.org/
+
+# Pinapina
+
+Pinapina
+
+## Auth Collection [/login]
+
+
+### Login [POST /login ]
+
+Метод для проходження авторизації. Повертає токени.
+
++ Request (application/json)
+
+        {
+            "email": "required|email",
+            "password": "required",
+        }
+
++ Response 200 (application/json)
+
+        [
+            {
+                "data": {}
+            }
+        ]
+
+### Register [POST /register]
+
+Метод для реєстрації користувача. Повертає токени.
+
++ Request (application/json)
+
+        {
+            "first_name": "required|string|max:256",
+            "last_name": "nullable|string|max:256",
+            "email": "required|email|unique:users,email",
+            "password": "required|string",
+            "sex": "required|in:M,F",
+            "age": "required|integer|gt:18|lt:80",
+        }
+
++ Response 200 (application/json)
+
+        [
+            {
+                "data": true
+            }
+        ]
+
+### Recovery password [POST /recovery]
+
+Метод для віправки листа зі зсилкою для зміни паролю. Повертає true.
+
++ Request (application/json)
+
+        {
+            "email": "required|email",
+            "link": "required|url|regex:/{hash}/",
+        }
+
++ Response 200 (application/json)
+
+        [
+            {
+                "data": true
+            }
+        ]
+
+### Reset password [POST /reset]
+
+Метод для зміни паролю. Повертає токени.
+
++ Request (application/json)
+
+        {
+            "hash": "required|size:32",
+            "password": "required",
+        }
+
++ Response 200 (application/json)
+
+        [
+            {
+                "data": {}
+            }
+        ]
+
+## Auth Socialite Collection [/socialite]
+
+
+### Redirect [POST /socialite/redirect ]
+
+Метод отримання зсилки для редіректу на сторнку провайдера.
+
++ Request (application/json)
+
+        {
+            "provider": "required:in:facebook,google",
+        }
+
++ Response 200 (application/json)
+
+        [
+            {
+                "data": {url}
+            }
+        ]
+
+### Google [GET /socialite/google/{params} ]
+
+Метод який примає дані від google та повертає токени створеного\авторизованого користувача.
+
+
++ Response 200 (application/json)
+
+        [
+            {
+                "data": {}
+            }
+        ]
+
+### Facebook [GET /socialite/facebook/{params} ]
+
+Метод який примає дані від facebook та повертає токени створеного\авторизованого користувача.
+
+
++ Response 200 (application/json)
+
+        [
+            {
+                "data": {}
+            }
+        ]
+
+## Profile Collection [/]
+
+
+### User [GET /user ]
+
+Повертає дані авторизованого користувача.
+
++ Request (application/json)
+
++ Response 200 (application/json)
+
+        [
+            {
+                "data": {}
+            }
+        ]
+
+### Profile [GET /my/profile ]
+
+Повертає датільний профайл авторизованого користувача для прев'ю.
+
++ Request (application/json)
+
++ Response 200 (application/json)
+
+        [
+            {
+                "data": {}
+            }
+        ]
+
+### Set email [PUT /my/email ]
+
+Встановлення email авторизованого користувача.
+
++ Request (application/json)
+
+        {
+            "email": "required|email|unique",
+        }
+
++ Response 200 (application/json)
+
+        [
+            {
+                "data": {}
+            }
+        ]
+
+### Set password [PUT /my/password ]
+
+Встановлення password авторизованого користувача.
+
++ Request (application/json)
+
+        {
+            "old_password": "required|string",
+            "password": "required|string|confirmed",
+        }
+
++ Response 200 (application/json)
+
+        [
+            {
+                "data": {}
+            }
+        ]
+
+### Get info [GET /my/info ]
+
+Get info.
+
++ Request (application/json)
+
+
++ Response 200 (application/json)
+
+        [
+            {
+                "data": {}
+            }
+        ]
+
+### Set info [PUT /my/info ]
+
+Set info
+
++ Request (application/json)
+
+        {
+            'heading': 'required|string|max:256',
+            'about': 'required|string',
+            'looking': 'required|string',
+        }
+
++ Response 200 (application/json)
+
+        [
+            {
+                "data": {}
+            }
+        ]
+
+### Set off [PUT /my/off ]
+
+Set account to "off"
+
++ Request (application/json)
+
+        {
+            'reason': 'nullable|string|max:256',
+            'password': 'required|string',
+        }
+
++ Response 200 (application/json)
+
+        [
+            {
+                "data": {}
+            }
+        ]
+
+### Set on [PUT /my/on ]
+
+Set account to "on"
+
++ Request (application/json)
+
++ Response 200 (application/json)
+
+        [
+            {
+                "data": {}
+            }
+        ]
+
+### Toggle busy [PUT /my/busy ]
+
+Toggle account busy status
+
++ Request (application/json)
+
++ Response 200 (application/json)
+
+        [
+            {
+                "data": {}
+            }
+        ]
+
+### Toggle hidden [PUT /my/hidden ]
+
+Toggle account hidden status
+
++ Request (application/json)
+
++ Response 200 (application/json)
+
+        [
+            {
+                "data": {}
+            }
+        ]
+
+### Get notify settings [GET /notify-settings ]
+
+Get notify settings
+
++ Request (application/json)
+
++ Response 200 (application/json)
+
+        [
+            {
+                "data": {}
+            }
+        ]
+
+### Set notify settings [PUT /notify-settings ]
+
+Set notify settings
+
++ Request (application/json)
+
+        {
+            "settings": "required|array"
+            "settings.*.type": "required|string|in:email"
+            "settings.*.name": "required|string|in:new-message,new-activity"
+            "settings.*.value": "required|string|in:daily,weekly,never"
+        }
+
++ Response 200 (application/json)
+
+        [
+            {
+                "data": {}
+            }
+        ]
+
+### Get photos [GET /photos ]
+
+Повертає фото авторизованого користувача.
+
++ Request (application/json)
+
+        {
+            "email": "required|email",
+            "password": "required",
+        }
+
++ Response 200 (application/json)
+
+        [
+            {
+                "data": {}
+            }
+        ]
+
+### Create photo [POST /photos ]
+
+Додає фото.
+
++ Request (application/json)
+
+        {
+            "photo": "required|image|max:2048",
+        }
+
++ Response 200 (application/json)
+
+        [
+            {
+                "data": {}
+            }
+        ]
+
+### Set main photo [PUT /photos/{photo_id} ]
+
+Встановлює фото основним.
+
++ Request (application/json)
+
++ Response 200 (application/json)
+
+        [
+            {
+                "data": {}
+            }
+        ]
+
+### Delete photo [DELETE /photos/{photo_id} ]
+
+Видалення фото.
+
++ Request (application/json)
+
++ Response 200 (application/json)
+
+        [
+            {
+                "data": {}
+            }
+        ]
+
+### Get profile params [GET /profile/params ]
+
+Отримати дані для форми профілю.
+
++ Request (application/json)
+
++ Response 200 (application/json)
+
+        [
+            {
+                "data": {}
+            }
+        ]
+
+### Get user profile [GET /profile ]
+
+Отримати дані профілю користувача.
+
++ Request (application/json)
+
++ Response 200 (application/json)
+
+        [
+            {
+                "data": {}
+            }
+        ]
+
+### Set user profile [POST /profile ]
+
+Встановити профіль користувача.
+
++ Request (application/json)
+
+    {
+        "first_name": "required|string|max:256",
+        "dob_day": "required|date_format:d",
+        "dob_month": "required|date_format:m",
+        "dob_year": "required|date_format:Y",
+        "sex": "required|in:M,F",
+        "params": "array",
+        "location.country_id": "nullable|integer",
+        "info.heading": "nullable|string|max:256",
+        "info.about": "nullable|string",
+        "info.looking": "nullable|string",
+    }
+
++ Response 200 (application/json)
+
+        [
+            {
+                "data": {}
+            }
+        ]
+
+### Get match params [GET /match/params ]
+
+Отримати дані для форми.
+
++ Request (application/json)
+
++ Response 200 (application/json)
+
+        [
+            {
+                "data": {}
+            }
+        ]
+
+### Get user match [GET /match ]
+
+Отримати дані користувача.
+
++ Request (application/json)
+
++ Response 200 (application/json)
+
+        [
+            {
+                "data": {}
+            }
+        ]
+
+### Set user match [POST /match ]
+
+Встановити match користувача.
+
++ Request (application/json)
+
+    {
+        'sex': 'nullable|in:M,F',
+        'age_from': 'nullable|integer|gte:18|lte:80',
+        'age_to': 'nullable|integer|gt:age_from|lte:80',
+        'country_id': 'nullable|integer',
+        'formatted_address': 'nullable|string',
+        'place_id': 'nullable|string',
+        'lat': 'nullable|numeric',
+        'long': 'nullable|numeric',
+        'match_params': 'nullable|array',
+    }
+
++ Response 200 (application/json)
+
+        [
+            {
+                "data": {}
+            }
+        ]
+
+### Get user interest [GET /interest ]
+
+Отримати interest.
+
++ Request (application/json)
+
++ Response 200 (application/json)
+
+        [
+            {
+                "data": {}
+            }
+        ]
+
+### Set user interest [POST /interest ]
+
+Встановити interest.
+
++ Request (application/json)
+
+    {
+        "fun": "nullable|string",
+        "music": "nullable|string",
+        "food": "nullable|string",
+        "sport": "nullable|string",
+    }
+
++ Response 200 (application/json)
+
+        [
+            {
+                "data": {}
+            }
+        ]
+
+### Get user personality [GET /personality ]
+
+Отримати personality.
+
++ Request (application/json)
+
++ Response 200 (application/json)
+
+        [
+            {
+                "data": {}
+            }
+        ]
+
+### Set user personality [POST /personality ]
+
+Встановити personality.
+
++ Request (application/json)
+
+    {
+        "desc": "nullable|string",
+        "travel": "nullable|string",
+        "weekend": "nullable|string",
+        "humor": "nullable|string",
+        "person": "nullable|string",
+        "dress": "nullable|string",
+    }
+
++ Response 200 (application/json)
+
+        [
+            {
+                "data": {}
+            }
+        ]
+
+## People Collection [/people]
+
+### Search params [GET /people/search/params ]
+
+Метод для отримання параметрів форми.
+
++ Request (application/json)
+
+        {
+
+        }
+
++ Response 200 (application/json)
+
+        [
+            {
+                "data": {}
+            }
+        ]
+
+### Search [POST /people ]
+
+Метод для пошуку людей. Може приймати параметри для пошуку. Якщо передати параметр name - пошук збережеться.
+
++ Request (application/json)
+
+        {
+
+        }
+
++ Response 200 (application/json)
+
+        [
+            {
+                "data": {}
+            }
+        ]
+
+### Smart search [POST /people/smartsearch ]
+
+Метод для пошуку людей по імені.
+
++ Request (application/json)
+
+        {
+            "name": "nullable|string",
+        }
+
++ Response 200 (application/json)
+
+        [
+            {
+                "data": {}
+            }
+        ]
+
+### Matches [GET /people/match ]
+
+Метод для пошуку людей за параметрами, які встановлені в профайлі match.
+
++ Request (application/json)
+
+        {
+
+        }
+
++ Response 200 (application/json)
+
+        [
+            {
+                "data": {}
+            }
+        ]
+
+### Profile short [GET /people/{user_id}/short ]
+
+Метод для отримання короткої інфи про профайл.
+
++ Request (application/json)
+
+        {
+
+        }
+
++ Response 200 (application/json)
+
+        [
+            {
+                "data": {}
+            }
+        ]
+
+### Profile detail [GET /people/{user_id}/detail ]
+
+Метод для отримання детальної інфи про профайл.
+
++ Request (application/json)
+
+        {
+
+        }
+
++ Response 200 (application/json)
+
+        [
+            {
+                "data": {}
+            }
+        ]
+
+### Favorite [PUT /people/{user_id}/favorite ]
+
+Toggle favorite
+
++ Request (application/json)
+
+        {
+
+        }
+
++ Response 200 (application/json)
+
+        [
+            {
+                "data": {}
+            }
+        ]
+
+### Interest [PUT /people/{user_id}/interest ]
+
+Toggle interest
+
++ Request (application/json)
+
+        {
+
+        }
+
++ Response 200 (application/json)
+
+        [
+            {
+                "data": {}
+            }
+        ]
+
+### Block [PUT /people/{user_id}/block ]
+
+Toggle block
+
++ Request (application/json)
+
+        {
+
+        }
+
++ Response 200 (application/json)
+
+        [
+            {
+                "data": {}
+            }
+        ]
+
+## Searches Collection [/searches]
+
+### Get list [GET /searches ]
+
+Список збережених пошуків.
+
++ Request (application/json)
+
+        {
+
+        }
+
++ Response 200 (application/json)
+
+        [
+            {
+                "data": {}
+            }
+        ]
+
+### Get item [GET /searches/{search_id} ]
+
+Отримати параметри збереженого пошуку.
+
++ Request (application/json)
+
+        {
+
+        }
+
++ Response 200 (application/json)
+
+        [
+            {
+                "data": {}
+            }
+        ]
+
+### Delete item [DELETE /searches/{search_id} ]
+
+Видалити збережений пошук.
+
++ Request (application/json)
+
+        {
+
+        }
+
++ Response 200 (application/json)
+
+        [
+            {
+                "data": {}
+            }
+        ]
+
+### Get item peoples [GET /searches/{search_id}/people ]
+
+Отримати людей по збереженому пошуку.
+
++ Request (application/json)
+
+        {
+
+        }
+
++ Response 200 (application/json)
+
+        [
+            {
+                "data": {}
+            }
+        ]
+
+## Activities Collection [/activities]
+
+### Inbox [GET /activities/inbox ]
+
+Get inbox activities.
+
++ Request (application/json)
+
+    {
+        "type": "nullable|string",
+    }
+
++ Response 200 (application/json)
+
+        [
+            {
+                "data": {}
+            }
+        ]
+
+### Sent [GET /activities/sent ]
+
+Get sent activities
+
++ Request (application/json)
+
+    {
+        "type": "nullable|string",
+    }
+
++ Response 200 (application/json)
+
+        [
+            {
+                "data": {}
+            }
+        ]
+
+## Dialog Collection [/dialogs]
+
+### Open [PUT /dialogs/open/{user_id} ]
+
+Open dialog with user. Return dialog id.
+
++ Request (application/json)
+
++ Response 200 (application/json)
+
+        [
+            {
+                "data": {}
+            }
+        ]
+
+### Get dialogs [GET /dialogs ]
+
+Get active dialogs.
+
++ Request (application/json)
+
++ Response 200 (application/json)
+
+        [
+            {
+                "data": {}
+            }
+        ]
+
+### Create message [POST /dialogs/{dialog_id} ]
+
+Create message in dialog.
+
++ Request (application/json)
+
+    {
+        'text': 'required|string',
+    }
+
++ Response 200 (application/json)
+
+        [
+            {
+                "data": {}
+            }
+        ]
+
+### Get dialog messages [GET /dialogs/{dialog_id} ]
+
+Get dialog messages.
+
++ Request (application/json)
+
++ Response 200 (application/json)
+
+        [
+            {
+                "data": {}
+            }
+        ]
+
+### Delete dialogs [PUT /dialogs/delete ]
+
+Delete dialogs.
+
++ Request (application/json)
+
+    {
+        'ids': 'required|array|min:1',
+    }
+
++ Response 200 (application/json)
+
+        [
+            {
+                "data": true
+            }
+        ]
+
+## Payment Collection [/payments]
+
+### Get plans [GET /plans ]
+
+Get available plans
+
++ Request (application/json)
+
++ Response 200 (application/json)
+
+        [
+            {
+                "data": {}
+            }
+        ]
+
+### Create stripe subscription [POST /payments/stripe/{plan_id} ]
+
+Create stripe subscription.
+
++ Request (application/json)
+
+    {
+        'token': 'required|string',
+    }
+
++ Response 200 (application/json)
+
+        [
+            {
+                "data": true
+            }
+        ]
+
+### Create paypal subscription [POST /payments/paypal/{plan_id} ]
+
+Create paypal subscription.
+
++ Request (application/json)
+
+    {
+        'orderID': 'required|string',
+        'subscriptionID': 'required|string',
+    }
+
++ Response 200 (application/json)
+
+        [
+            {
+                "data": true
+            }
+        ]
+
+### Get subscriptions [GET /subscriptions ]
+
+Get user subscriptions.
+
++ Request (application/json)
+
++ Response 200 (application/json)
+
+        [
+            {
+                "data": true
+            }
+        ]
+
+### Stop paypal subscription [PUT /subscriptions/paypal/{paypal_subscription_id}/stop ]
+
+Stop paypal subscription.
+
++ Request (application/json)
+
++ Response 200 (application/json)
+
+        [
+            {
+                "data": true
+            }
+        ]
+
+### Start paypal subscription [PUT /subscriptions/paypal/{paypal_subscription_id}/start ]
+
+Start paypal subscription.
+
++ Request (application/json)
+
++ Response 200 (application/json)
+
+        [
+            {
+                "data": true
+            }
+        ]
+
+### Stop stripe subscription [PUT /subscriptions/stripe/{stripe_subscription_id}/stop ]
+
+Stop stripe subscription.
+
++ Request (application/json)
+
++ Response 200 (application/json)
+
+        [
+            {
+                "data": true
+            }
+        ]
+
+### Start stripe subscription [PUT /subscriptions/stripe/{stripe_subscription_id}/start ]
+
+Start stripe subscription.
+
++ Request (application/json)
+
++ Response 200 (application/json)
+
+        [
+            {
+                "data": true
+            }
+        ]
+
+## Admin Auth Collection [/admin/login]
+
+### Login [POST /admin/login ]
+
+Метод для проходження авторизації адміна. Повертає токени.
+
++ Request (application/json)
+
+        {
+            "email": "required|email",
+            "password": "required",
+        }
+
++ Response 200 (application/json)
+
+        [
+            {
+                "data": {}
+            }
+        ]
+
+### User [GET /admin/user ]
+
+Метод отримання інфи про авторизованого адміна.
+
++ Request (application/json)
+
++ Response 200 (application/json)
+
+        [
+            {
+                "data": {}
+            }
+        ]
+
+## Admin Users Collection [/admin/users]
+
+### List [POST /admin/users ]
+
+Повертає пагінований (20) список юзерів.
+
++ Request (application/json)
+
++ Response 200 (application/json)
+
+        [
+            {
+                "data": {}
+            }
+        ]
+
+### Item get [GET /admin/users/{user_id} ]
+
+Повертає Детальну інфу про юзера.
+
++ Request (application/json)
+
++ Response 200 (application/json)
+
+        [
+            {
+                "data": {}
+            }
+        ]
+
+### Toggle block [PUT /admin/users/{user_id}/block ]
+
+Дзеркально міняє блокований статус.
+
++ Request (application/json)
+
++ Response 200 (application/json)
+
+        [
+            {
+                "data": {}
+            }
+        ]
+
+### Set admin comment [PUT /admin/users/{user_id}/comment ]
+
+Встановлює для користувача коментар адміна.
+
++ Request (application/json)
+
+        {
+            "text": "nullable|string",
+        }
+
++ Response 200 (application/json)
+
+        [
+            {
+                "data": {}
+            }
+        ]
+
+## Admin Photos Collection [/admin/photos]
+
+### List [GET /admin/photos ]
+
+Повертає пагінований (20) список юзерів з фотографіями.
+
++ Request (application/json)
+
++ Response 200 (application/json)
+
+        [
+            {
+                "data": {}
+            }
+        ]
+
+### Toggle approve [PUT /admin/photos/{photo_id}/approve ]
+
+Toggle approve photo.
+
++ Request (application/json)
+
++ Response 200 (application/json)
+
+        [
+            {
+                "data": {}
+            }
+        ]
+
+### Set main [PUT /admin/photos/{photo_id}/main ]
+
+Set main photo.
+
++ Request (application/json)
+
++ Response 200 (application/json)
+
+        [
+            {
+                "data": {}
+            }
+        ]
+
+### Delete photo [DELETE /admin/photos/{photo_id} ]
+
+Delete photo.
+
++ Request (application/json)
+
++ Response 200 (application/json)
+
+        [
+            {
+                "data": {}
+            }
+        ]
+
+## Admin Coupons Collection [/admin/coupons]
+
+### List [GET /admin/coupons ]
+
+Повертає пагінований (20) список купонів.
+
++ Request (application/json)
+
++ Response 200 (application/json)
+
+        [
+            {
+                "data": {}
+            }
+        ]
+
+### Create [POST /admin/coupons ]
+
+Створює купон.
+
++ Request (application/json)
+
+        {
+            'code': 'required|string|max:256|unique:coupons,code',
+            'count_days': 'required|integer|gt:0',
+            'max_uses': 'required|integer|gt:0',
+            'expired_at': 'required|date',
+        }
+
++ Response 200 (application/json)
+
+        [
+            {
+                "data": {}
+            }
+        ]
+
+### Get [GET /admin/coupons/{coupon_id} ]
+
+Повертає інфу про купон + юзери, які використали купон.
+
++ Request (application/json)
+
++ Response 200 (application/json)
+
+        [
+            {
+                "data": {}
+            }
+        ]
+
+### Set pause [PUT /admin/coupons/{coupon_id}/pause ]
+
+Ставить купон на паузу.
+
++ Request (application/json)
+
++ Response 200 (application/json)
+
+        [
+            {
+                "data": {}
+            }
+        ]
+
+### Set unpause [PUT /admin/coupons/{coupon_id}/unpause ]
+
+Знімає купон з паузи.
+
++ Request (application/json)
+
++ Response 200 (application/json)
+
+        [
+            {
+                "data": {}
+            }
+        ]
+
+### Delete [DELETE /admin/coupons/{coupon_id} ]
+
+Змінюює статус на видалений.
+
++ Request (application/json)
+
++ Response 200 (application/json)
+
+        [
+            {
+                "data": {}
+            }
+        ]
